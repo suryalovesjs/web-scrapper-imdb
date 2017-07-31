@@ -1,0 +1,9 @@
+
+<ul>
+
+  {%for item in data%}
+  <li>
+    <a href="/music/{{item.name}}">{{item.name}}</a> - {{item.rating}}
+  </li>
+  {% endfor %}
+</ul>
