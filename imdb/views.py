@@ -39,9 +39,41 @@ def popular(request):
     source_code = requests.get(url)
     plain_text = source_code.text
     soup = BeautifulSoup(plain_text, "html.parser")
+
     # //from_encoding="utf-8"
     content = {'data': []}
+    print('test')
+    for link in soup.findAll('table',{'class':'genre-table'}):
+
+        for row in link.findAll('tr'):
+            for col in row.findAll('td'):
+                context = {'genre': 'nil','link':"nil"}
+                context['genre']= col.find('h3').find('a').find(text=True)
+
+                context['link']= col.find('h3').find('a')['href']
+                print(context)
+                content['data'].append(context)
 
 
 
     return render(request,'popular.html',content)
+
+
+def genre(request,genre_name):
+    context = {
+        'genre':genre_name,
+        'data':[]
+    }
+    url = 'http://www.imdb.com/genre/'+genre_name+'/'
+    print(url)
+    print('----------')
+    source_code = requests.get(url)
+    plain_text = source_code.text
+    soup = BeautifulSoup(plain_text, "html.parser")
+
+    for link in soup.findAll('table',{'class':'results'}):
+        print(link)
+        for row in link.findAll('td',{'class':'title'}):
+            print(row)
+
+    return render(request,'genre.html',context)
