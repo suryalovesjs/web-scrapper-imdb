@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <title>Genre</title>
+        {% load staticfiles %}
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="{% static 'movies/style.css' %}" />
+    </head>
+    <body>
+        <div class="container-fluid">
+
+            <h3>Genre - {{genre}}</h3>
+            {%for item in data%}
+            <div class="row sets">
+                <div class="col-md-1"><img src="{{item.image}}"></div>
+                <div class="col-md-9">
+                    <h4>{{item.movie}}</h4>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </body>
+
+</html>

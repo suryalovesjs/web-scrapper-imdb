@@ -39,9 +39,57 @@ def popular(request):
     source_code = requests.get(url)
     plain_text = source_code.text
     soup = BeautifulSoup(plain_text, "html.parser")
+
     # //from_encoding="utf-8"
     content = {'data': []}
+    for link in soup.findAll('table',{'class':'genre-table'}):
+
+        for row in link.findAll('tr'):
+            for col in row.findAll('td'):
+                context = {'genre': 'nil','link':"nil"}
+                context['genre']= col.find('h3').find('a').find(text=True)
+
+                context['link']= col.find('h3').find('a')['href']
+                content['data'].append(context)
 
 
 
     return render(request,'popular.html',content)
+
+
+def genre(request,genre_name):
+    context = {
+        'genre':genre_name,
+        'data':[]
+    }
+    genre = genre_name.lower()
+    url = 'http://www.imdb.com/genre/'+genre+'/'
+    source_code = requests.get(url)
+    plain_text = source_code.text
+    soup = BeautifulSoup(plain_text, "html.parser")
+
+    for link in soup.findAll('table',{'class':'results'}):
+        # print(link)
+        content = {'movie': 'nil', 'image': 'nil'}
+        count = 0;
+        for row in link.findAll('td',{'class':['title','image']}):
+
+
+            # print(row['class'][0])
+            if row['class'][0] == 'title':
+                content['movie'] = row.find('a').string
+                # print('istitle')
+            else:
+                content['image'] = row.find('img')['src']
+                # print(content['image'])
+
+            if count%2 is 1:
+                print(content)
+                context['data'].append(content)
+                content = {'movie': 'nil', 'image': 'nil'}
+
+            count += 1
+
+
+
+    return render(request,'genre.html',context)
